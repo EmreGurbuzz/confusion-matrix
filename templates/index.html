@@ -3,61 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karmaşıklık Matrisi</title>
+    <title>Confusion Matrix Hesaplayıcı</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        function addTaskInput(taskLabel = '', complexity = '', impact = '') {
-            var taskInputs = document.getElementById('taskInputs');
-            var index = taskInputs.children.length / 3; // Each task has three inputs
-            var taskDiv = document.createElement('div');
-            taskDiv.className = 'task-group';
-            taskDiv.innerHTML = `
-                <div class="form-group">
-                    <label for="taskLabel${index}">Değer Adı:</label>
-                    <input type="text" class="form-control" id="taskLabel${index}" name="taskLabel${index}" value="${taskLabel}" required>
-                </div>
-                <div class="form-group">
-                    <label for="complexity${index}">Karmaşıklık (1-5):</label>
-                    <input type="number" class="form-control" id="complexity${index}" name="complexity${index}" min="1" max="5" value="${complexity}" required>
-                </div>
-                <div class="form-group">
-                    <label for="impact${index}">Etki (1-5):</label>
-                    <input type="number" class="form-control" id="impact${index}" name="impact${index}" min="1" max="5" value="${impact}" required>
-                </div>
-            `;
-            taskInputs.appendChild(taskDiv);
-        }
-
-        function validateInputs() {
-            var taskInputs = document.getElementById('taskInputs');
-            var taskCount = taskInputs.children.length / 3; // Each task has three inputs
-            for (var i = 0; i < taskCount; i++) {
-                var complexity = parseInt(document.getElementById(`complexity${i}`).value);
-                var impact = parseInt(document.getElementById(`impact${i}`).value);
-                if (complexity < 1 || complexity > 5 || impact < 1 || impact > 5) {
-                    alert(`Hata: Görev ${i+1} için karmaşıklık ve etki değerleri 1-5 aralığında olmalıdır`);
-                    return false;
-                }
-            }
-            return true;
-        }
-    </script>
 </head>
 <body>
     <div class="container">
-        <h1 class="mt-5">Karmaşıklık Matrisi</h1>
+        <h1 class="mt-5">Confusion Matrix Hesaplayıcı</h1>
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#faqModal">SSS</button>
         
-        <!-- FAQ Modal -->
+        <!-- SSS Modal -->
         <div class="modal fade" id="faqModal" tabindex="-1" aria-labelledby="faqModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="faqModalLabel">Sıkça Sorulan Sorular</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Kapat">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -67,13 +30,13 @@
                                 <div class="card-header" id="headingOne">
                                     <h2 class="mb-0">
                                         <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            Karmaşıklık matrisi nedir?
+                                            Confusion Matrix nedir?
                                         </button>
                                     </h2>
                                 </div>
                                 <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#faqAccordion">
                                     <div class="card-body">
-                                        Karmaşıklık matrisi, bir sistemin veya projenin karmaşıklığını değerlendirmek için kullanılan bir araçtır.
+                                        Confusion Matrix, bir sınıflandırma modelinin performansını değerlendirmek için kullanılan bir tablodur.
                                     </div>
                                 </div>
                             </div>
@@ -81,13 +44,13 @@
                                 <div class="card-header" id="headingTwo">
                                     <h2 class="mb-0">
                                         <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                            Karmaşıklık matrisi neyi çözer?
+                                            Confusion Matrix ne işe yarar?
                                         </button>
                                     </h2>
                                 </div>
                                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#faqAccordion">
                                     <div class="card-body">
-                                        Karmaşıklık matrisi, bir sistemin veya projenin karmaşıklığını analiz ederek, potansiyel sorunları ve iyileştirme alanlarını belirlemeye yardımcı olur.
+                                        Confusion Matrix, modelin doğru ve yanlış sınıflandırmalarını göstererek modelin doğruluğunu ve hatalarını analiz etmeye yardımcı olur.
                                     </div>
                                 </div>
                             </div>
@@ -95,13 +58,13 @@
                                 <div class="card-header" id="headingThree">
                                     <h2 class="mb-0">
                                         <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                            Karmaşıklık matrisi nasıl kullanılır?
+                                            Confusion Matrix nasıl çalışır?
                                         </button>
                                     </h2>
                                 </div>
                                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#faqAccordion">
                                     <div class="card-body">
-                                        Karmaşıklık matrisi, sistemin veya projenin farklı bileşenlerinin karmaşıklığını değerlendirmek için kullanılır. Her bileşen için karmaşıklık puanları belirlenir ve bu puanlar matriste gösterilir.
+                                        Confusion Matrix, gerçek pozitif, gerçek negatif, yanlış pozitif ve yanlış negatif değerlerini kullanarak modelin performansını değerlendirir.
                                     </div>
                                 </div>
                             </div>
@@ -109,75 +72,131 @@
                                 <div class="card-header" id="headingFour">
                                     <h2 class="mb-0">
                                         <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                            Nasıl Çalışır?
+                                            Hangi değerler girilmelidir?
                                         </button>
                                     </h2>
                                 </div>
                                 <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#faqAccordion">
                                     <div class="card-body">
-                                        <p>1. Kullanıcıdan iş durumları için karmaşıklık ve etki değerlerini alır.</p>
-                                        <p>2. Bu değerleri kullanarak karmaşıklık matrisini oluşturur.</p>
-                                        <p>3. Matrisin grafiğini oluşturur ve ekranda gösterir.</p>
-                                        <p>4. Ölçümler ve türevler hesaplanarak ekranda gösterilir.</p>
-                                        <p>Örnek Matris:</p>
-                                        <pre>
-API Entegrasyonu: Karmaşıklık 3, Etki 4
-Bildirim Sistemi: Karmaşıklık 2, Etki 3
-Raporlama: Karmaşıklık 4, Etki 5
-Kullanıcı Girişi: Karmaşıklık 1, Etki 2
-                                        </pre>
-                                        <p>Bu matrisin grafiği ve sonuçları aşağıdaki gibidir:</p>
-                                        <p>Hassasiyet: 0,2500 (TPR = TP / (TP + FN))</p>
-                                        <p>Özgüllük: 0,6552 (SPC = TN / (FP + TN))</p>
-                                        <p>Kesinlik: 0,3333 (PPV = TP / (TP + FP))</p>
-                                        <p>Negatif Tahmini Değer: 0,5588 (NBD = TN / (TN + FN))</p>
-                                        <p>Yanlış Pozitif Oranı: 0,3448 (FPR = FP / (FP + TN))</p>
-                                        <p>Yanlış Keşif Oranı: 0,6667 (FDR = FP / (FP + TP))</p>
-                                        <p>Yanlış Negatif Oranı: 0,7500 (FNR = FN / (FN + TP))</p>
-                                        <p>Kesinlik: 0,4898 (ACC = (TP + TN) / (P + N))</p>
-                                        <p>F1 Puanı: 0,2857 (F1 = 2TP / (2TP + FP + FN))</p>
-                                        <p>Matthews Korelasyon Katsayısı: -0,1011 (TP*TN - FP*FN / sqrt((TP+FP)*(TP+FN)*(TN+FP)*(TN+FN)))</p>
+                                        Kullanıcı, True Positive (TP), True Negative (TN), False Positive (FP) ve False Negative (FN) değerlerini girmelidir.
                                     </div>
                                 </div>
                             </div>
-                            <!-- Add more questions and answers as needed -->
+                            <div class="card">
+                                <div class="card-header" id="headingFive">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                            Sensitivity nedir?
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#faqAccordion">
+                                    <div class="card-body">
+                                        Sensitivity (TPR), modelin doğru pozitifleri tespit etme oranıdır. TPR = TP / (TP + FN)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingSix">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                            Specificity nedir?
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#faqAccordion">
+                                    <div class="card-body">
+                                        Specificity (SPC), modelin doğru negatifleri tespit etme oranıdır. SPC = TN / (FP + TN)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingSeven">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                                            Precision nedir?
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#faqAccordion">
+                                    <div class="card-body">
+                                        Precision (PPV), modelin pozitif tahminlerinin doğruluk oranıdır. PPV = TP / (TP + FP)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingEight">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                                            Negative Predictive Value nedir?
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="collapseEight" class="collapse" aria-labelledby="headingEight" data-parent="#faqAccordion">
+                                    <div class="card-body">
+                                        Negative Predictive Value (NPV), modelin negatif tahminlerinin doğruluk oranıdır. NPV = TN / (TN + FN)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingNine">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                                            Accuracy nedir?
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="collapseNine" class="collapse" aria-labelledby="headingNine" data-parent="#faqAccordion">
+                                    <div class="card-body">
+                                        Accuracy (ACC), modelin genel doğruluk oranıdır. ACC = (TP + TN) / (P + N)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingTen">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+                                            Matthews Correlation Coefficient nedir?
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="collapseTen" class="collapse" aria-labelledby="headingTen" data-parent="#faqAccordion">
+                                    <div class="card-body">
+                                        Matthews Correlation Coefficient (MCC), modelin genel performansını ölçen bir metriktir. MCC = (TP*TN - FP*FN) / sqrt((TP+FP)*(TP+FN)*(TN+FP)*(TN+FN))
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <form method="POST" action="/calculate" class="mt-4" onsubmit="return validateInputs()">
-            <div id="taskInputs">
-                <!-- Dynamic task inputs will be added here -->
-                {% for i in range(task_count) %}
-                <script>
-                    addTaskInput("{{ task_labels[i] }}", "{{ complexities[i] }}", "{{ impacts[i] }}");
-                </script>
-                {% endfor %}
+        <form method="POST" action="/calculate" class="mt-4">
+            <div class="form-group">
+                <label for="tp">True Positive (TP):</label>
+                <input type="number" class="form-control" id="tp" name="tp" required>
             </div>
-            <button type="button" class="btn btn-secondary" onclick="addTaskInput()">Değer Ekle</button>
-            <button type="submit" class="btn btn-primary">Sonuç Getir</button>
+            <div class="form-group">
+                <label for="tn">True Negative (TN):</label>
+                <input type="number" class="form-control" id="tn" name="tn" required>
+            </div>
+            <div class="form-group">
+                <label for="fp">False Positive (FP):</label>
+                <input type="number" class="form-control" id="fp" name="fp" required>
+            </div>
+            <div class="form-group">
+                <label for="fn">False Negative (FN):</label>
+                <input type="number" class="form-control" id="fn" name="fn" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Hesapla</button>
         </form>
 
-        <h2 class="mt-5">Grafik</h2>
-        <div class="row">
-            <div class="col-md-6">
-                <h3>Bar Chart</h3>
-                <div id="barChart">
-                    {% if graph_url %}
-                    <img src="data:image/png;base64,{{ graph_url }}" alt="Karmaşıklık Matrisi Bar Chart">
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <h3>Heatmap</h3>
-                <div id="heatmap">
-                    {% if heatmap_url %}
-                    <img src="data:image/png;base64,{{ heatmap_url }}" alt="Karmaşıklık Matrisi Heatmap">
-                    {% endif %}
-                </div>
-            </div>
+        <h2 class="mt-5">Confusion Matrix</h2>
+        <div id="confusionMatrix">
+            {% if confusion_matrix_url %}
+            <img src="data:image/png;base64,{{ confusion_matrix_url }}" alt="Confusion Matrix">
+            {% endif %}
         </div>
 
         <h2 class="mt-5">Ölçümler ve Türevler</h2>
@@ -200,6 +219,5 @@ Kullanıcı Girişi: Karmaşıklık 1, Etki 2
             </tbody>
         </table>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
