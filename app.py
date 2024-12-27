@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import io
 import base64
 import numpy as np
+import seaborn as sns
 
 app = Flask(__name__)
 
@@ -43,6 +44,34 @@ def calculate():
     confusion_matrix_url = base64.b64encode(img_cm.getvalue()).decode()
     plt.close()
     
+    # Generate heatmap
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='coolwarm')
+    plt.title('Confusion Matrix Heatmap')
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    
+    img_heatmap = io.BytesIO()
+    plt.savefig(img_heatmap, format='png')
+    img_heatmap.seek(0)
+    heatmap_url = base64.b64encode(img_heatmap.getvalue()).decode()
+    plt.close()
+    
+    # Generate bar graphs
+    labels = ['True Positive', 'False Positive', 'False Negative', 'True Negative']
+    values = [tp, fp, fn, tn]
+    
+    plt.figure(figsize=(8, 6))
+    plt.bar(labels, values, color=['blue', 'orange', 'red', 'green'])
+    plt.title('Classification Results')
+    plt.ylabel('Count')
+    
+    img_bar = io.BytesIO()
+    plt.savefig(img_bar, format='png')
+    img_bar.seek(0)
+    bar_url = base64.b64encode(img_bar.getvalue()).decode()
+    plt.close()
+    
     # Calculate measures
     def safe_divide(numerator, denominator):
         return numerator / denominator if denominator != 0 else 0
@@ -60,7 +89,7 @@ def calculate():
         {"name": "Matthews Correlation Coefficient", "value": safe_divide(tp * tn - fp * fn, np.sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn))), "formula": "TP*TN - FP*FN / sqrt((TP+FP)*(TP+FN)*(TN+FP)*(TN+FN))"}
     ]
     
-    return render_template('index.html', confusion_matrix_url=confusion_matrix_url, measures=measures)
+    return render_template('index.html', confusion_matrix_url=confusion_matrix_url, heatmap_url=heatmap_url, bar_url=bar_url, measures=measures)
 
 if __name__ == '__main__':
     app.run(debug=True)

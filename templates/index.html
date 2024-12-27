@@ -199,6 +199,20 @@
             {% endif %}
         </div>
 
+        <h2 class="mt-5">Confusion Matrix Heatmap</h2>
+        <div id="heatmap">
+            {% if heatmap_url %}
+            <img src="data:image/png;base64,{{ heatmap_url }}" alt="Confusion Matrix Heatmap">
+            {% endif %}
+        </div>
+
+        <h2 class="mt-5">Classification Results</h2>
+        <div id="barGraph">
+            {% if bar_url %}
+            <img src="data:image/png;base64,{{ bar_url }}" alt="Classification Results">
+            {% endif %}
+        </div>
+
         <h2 class="mt-5">Ölçümler ve Türevler</h2>
         <table class="table table-bordered">
             <thead>
